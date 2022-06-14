@@ -13,6 +13,7 @@ public class FriendEntity {
 
     @ManyToOne
     @MapsId("userId")
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 
     @ManyToOne

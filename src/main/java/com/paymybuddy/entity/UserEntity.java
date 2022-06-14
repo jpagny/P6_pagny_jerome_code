@@ -11,7 +11,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 public class UserEntity {
 
     @Id
@@ -30,6 +30,11 @@ public class UserEntity {
     @OneToMany(mappedBy = "user")
     Set<FriendEntity> friends;
 
+    @OneToMany(mappedBy = "debtor")
+    Set<TransactionEntity> debtorTransaction;
+
+    @OneToMany(mappedBy = "creditor")
+    Set<TransactionEntity> creditorTransaction;
 
     public UserEntity() {}
 }
