@@ -27,8 +27,8 @@ public class UserEntity {
     @JoinColumn(name = "account_id", referencedColumnName = "id", unique = true)
     private AccountEntity account;
 
-    @OneToMany(mappedBy = "user")
-    Set<FriendEntity> friends;
+    @OneToMany()
+    Set<UserEntity> friends;
 
     @OneToMany(mappedBy = "debtor")
     Set<TransactionEntity> debtorTransaction;
