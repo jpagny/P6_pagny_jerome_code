@@ -32,7 +32,7 @@ public class UserService implements IUserService {
 
         Optional<User> updatedUser = userRepository.findByEmailAddress(user.getEmailAddress());
 
-        if (!updatedUser.isPresent()){
+        if (updatedUser.isEmpty()){
             throw new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress());
         }
 
@@ -50,7 +50,7 @@ public class UserService implements IUserService {
 
         Optional<User> deletedUser = userRepository.findByEmailAddress(user.getEmailAddress());
 
-        if (!deletedUser.isPresent()){
+        if (deletedUser.isEmpty()){
             throw new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress());
         }
 
@@ -63,15 +63,15 @@ public class UserService implements IUserService {
         Optional<User> theUser = userRepository.findByEmailAddress(user.getEmailAddress());
         Optional<User> theFriend = userRepository.findByEmailAddress(friend.getEmailAddress());
 
-        if ( !theUser.isPresent() ){
+        if (theUser.isEmpty()){
             throw new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress());
         }
 
-        if ( !theFriend.isPresent() ){
+        if (theFriend.isEmpty()){
             throw new ResourceNotFoundException("User doesn't exist with given email : " + friend.getEmailAddress());
         }
 
-        if ( user.getFriends().contains(theFriend) ){
+        if ( user.getFriends().contains(friend) ){
             throw new ResourceIsAlreadyPresentException("User "  + user.getEmailAddress() + " is already friend with " + friend.getEmailAddress());
         }
 
