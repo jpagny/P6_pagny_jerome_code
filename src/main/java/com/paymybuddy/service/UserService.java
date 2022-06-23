@@ -1,5 +1,6 @@
 package com.paymybuddy.service;
 
+import com.paymybuddy.entity.Transaction;
 import com.paymybuddy.entity.User;
 import com.paymybuddy.exception.ResourceIsAlreadyPresentException;
 import com.paymybuddy.exception.ResourceNotFoundException;
@@ -79,6 +80,20 @@ public class UserService implements IUserService {
         userRepository.friends(user);
 
         return friend;
+    }
+
+    @Override
+    public Transaction addTransaction(Transaction transaction) {
+        Optional<User> debtor = userRepository.findByEmailAddress(transaction.getDebtor().getEmailAddress());
+        Optional<User> creditor = userRepository.findByEmailAddress(transaction.getCreditor().getEmailAddress());
+
+        debtor.get().getDebtorTransaction().add(transaction);
+        creditor.get().getCreditorTransaction().add(transaction);
+
+        userRepository.debtorTransaction(debtor.get());
+        userRepository.creditorTransaction((creditor.get()));
+
+        return transaction;
     }
 
 

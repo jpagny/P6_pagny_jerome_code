@@ -1,5 +1,6 @@
 package com.paymybuddy.service;
 
+import com.paymybuddy.entity.Transaction;
 import com.paymybuddy.entity.User;
 import com.paymybuddy.exception.ResourceIsAlreadyPresentException;
 import com.paymybuddy.exception.ResourceNotFoundException;
@@ -10,5 +11,6 @@ public interface IUserService {
     void delete(User user) throws ResourceNotFoundException;
     User addFriend(User user, User friend) throws ResourceNotFoundException, ResourceIsAlreadyPresentException;
 
+    Transaction addTransaction(Transaction transaction);
 
 }

@@ -1,6 +1,7 @@
 package com.paymybuddy.service;
 
 import com.paymybuddy.entity.Account;
+import com.paymybuddy.entity.Transaction;
 import com.paymybuddy.entity.User;
 import com.paymybuddy.exception.ResourceIsAlreadyPresentException;
 import com.paymybuddy.exception.ResourceNotFoundException;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
 
@@ -115,9 +117,6 @@ public class UserServiceTest {
 
         assertTrue(actualMessage.contains(expectedMessage));
     }
-
-
-    // add a new friend
     @Test
     @DisplayName("Should be returned the friend added when a new friend is added")
     public void should_beReturnedTheFriendAdded_when_aNewFriendIsAdded() throws ResourceNotFoundException, ResourceIsAlreadyPresentException {
@@ -131,8 +130,32 @@ public class UserServiceTest {
         assertTrue(user.getFriends().contains(friend));
     }
 
-    // add transaction debtor
+    @Test
+    @DisplayName("Should be returned the transaction debtor when a new transaction debtor is added")
+    public void should_beReturnedTheTransactionDebtor_when_aNewTransactionDebtorIsAdded(){
+        User debtor = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User creditor = new User(2, "nicolas", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        Transaction transaction = new Transaction(1,debtor,creditor,"Rbt pizza",100,0.05, LocalDate.now());
+        when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(debtor));
 
-    // add transaction creditor
+        Transaction transactionAdded = userService.addTransaction(transaction);
+
+        assertEquals(transactionAdded,transaction);
+        assertTrue(debtor.getDebtorTransaction().contains(transactionAdded));
+    }
+
+    @Test
+    @DisplayName("Should be returned the transaction creditor when a new transaction creditor is added")
+    public void should_beReturnedTheTransactionCreditor_when_aNewTransactionCreditorIsAdded(){
+        User creditor = new User(2, "nicolas", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User debtor = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        Transaction transaction = new Transaction(1,debtor,creditor,"Rbt pizza",100,0.05, LocalDate.now());
+        when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(creditor));
+
+        Transaction transactionAdded = userService.addTransaction(transaction);
+
+        assertEquals(transactionAdded,transaction);
+        assertTrue(creditor.getCreditorTransaction().contains(transactionAdded));
+    }
 
 }
