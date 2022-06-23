@@ -4,6 +4,8 @@ import com.paymybuddy.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 public class TransactionDTO {
@@ -11,6 +13,10 @@ public class TransactionDTO {
     private User debtor;
     private User creditor;
     private String description;
-    private Float amount;
-    private Float percentOfFreshTransaction;
+    private double amount;
+    private double percentOfFreshTransaction;
+    private LocalDate date;
+
+    public TransactionDTO() {
+    }
 }

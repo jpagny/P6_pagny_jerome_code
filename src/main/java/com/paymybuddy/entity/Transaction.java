@@ -25,8 +25,8 @@ public class Transaction {
     private User creditor;
 
     private String description;
-    private Float amount;
-    private Float percentOfFreshTransaction;
+    private double amount;
+    private double percentOfFreshTransaction;
 
     @Column(name="date", columnDefinition="TIMESTAMP")
     private LocalDate date;
