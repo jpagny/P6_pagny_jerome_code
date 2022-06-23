@@ -3,6 +3,7 @@ package com.paymybuddy.service;
 import com.paymybuddy.entity.Account;
 import com.paymybuddy.entity.User;
 import com.paymybuddy.exception.ResourceIsAlreadyPresentInOurDatabaseException;
+import com.paymybuddy.exception.ResourceNotFoundException;
 import com.paymybuddy.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +32,7 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Should be returned a new user when a new user is created")
+    @DisplayName("Should be returned user when a new user is created")
     public void should_BeReturnedNewUser_When_ANewUserIsCreated() throws ResourceIsAlreadyPresentInOurDatabaseException {
         User user = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
         when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.empty());
@@ -57,6 +58,36 @@ public class UserServiceTest {
 
         assertTrue(actualMessage.contains(expectedMessage));
     }
+
+    @Test
+    @DisplayName("Should be returned user when user is updated")
+    public void should_beReturnedUser_when_userIsUpdated() throws ResourceNotFoundException {
+        User userToUpdate = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(userToUpdate));
+        when(userRepository.save(any(User.class))).thenReturn(userToUpdate);
+
+        User userUpdated = userService.update(userToUpdate);
+
+        assertEquals(userUpdated, userRepository);
+    }
+
+    @Test
+    @DisplayName("Should be exception when user updated doesn't exist in our database")
+    public void should_beException_When_UserUpdatedDoesntExistInOurDatabase() {
+        User user = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.empty());
+        when(userRepository.save(any(User.class))).thenReturn(user);
+        Exception exception = assertThrows(ResourceNotFoundException.class, () ->
+                userService.update(user)
+        );
+
+        String expectedMessage = "User doesn't exist with given email : " + user.getEmailAddress();
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+
 
 
 
