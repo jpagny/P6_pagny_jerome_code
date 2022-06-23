@@ -7,5 +7,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class AccountDTO {
     private long id;
-    private Float balance;
+    private float balance;
+
+    public AccountDTO() {
+    }
 }

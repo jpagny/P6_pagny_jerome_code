@@ -12,11 +12,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "account")
 public class Account {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private Float balance;
+    private float balance;
 
     public Account() {}
 }

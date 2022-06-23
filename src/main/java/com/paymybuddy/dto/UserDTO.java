@@ -21,5 +21,6 @@ public class UserDTO {
     private Set<Transaction> debtorTransaction;
     private Set<Transaction> creditorTransaction;
 
-    public UserDTO(){}
+    public UserDTO() {
+    }
 }

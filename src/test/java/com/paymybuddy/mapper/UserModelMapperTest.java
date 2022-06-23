@@ -16,7 +16,7 @@ public class UserModelMapperTest {
     private ModelMapper modelMapper = new ModelMapper();
 
     @Test
-    @DisplayName("Should be mapped by entity to DTO when ModelMapper is called")
+    @DisplayName("Should be mapped by User entity to User DTO when ModelMapper is called")
     public void shouldBeMappedByEntityToDTO_WhenModelMapperIsCalled() {
         User user = new User(1, "Jerome", "Pagny", "pagny.jerome@", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
 
@@ -34,13 +34,12 @@ public class UserModelMapperTest {
     }
 
     @Test
-    @DisplayName("Should be mapped by DTO to entity when ModelMapper is called")
+    @DisplayName("Should be mapped by User DTO to User entity when ModelMapper is called")
     public void shouldBeMappedByDTOToEntity_WhenModelMapperIsCalled() {
         UserDTO userDTO = new UserDTO(1, "Pagny", "Jerome", "pagny.jerome@gmail.com", "xx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
 
         User user = modelMapper.map(userDTO, User.class);
 
-        assertEquals(user.getId(), userDTO.getId());
         assertEquals(user.getId(), userDTO.getId());
         assertEquals(user.getFirstName(), userDTO.getFirstName());
         assertEquals(user.getLastName(), userDTO.getLastName());
