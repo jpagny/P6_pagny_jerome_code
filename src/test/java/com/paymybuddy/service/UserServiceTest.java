@@ -62,13 +62,14 @@ public class UserServiceTest {
     @Test
     @DisplayName("Should be returned user when user is updated")
     public void should_beReturnedUser_when_userIsUpdated() throws ResourceNotFoundException {
-        User userToUpdate = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User userToUpdate = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "ccc", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        userToUpdate.setPassword("xxx");
         when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(userToUpdate));
         when(userRepository.save(any(User.class))).thenReturn(userToUpdate);
 
         User userUpdated = userService.update(userToUpdate);
 
-        assertEquals(userUpdated, userRepository);
+        assertEquals(userUpdated, userToUpdate);
     }
 
     @Test
