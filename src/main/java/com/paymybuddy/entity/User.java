@@ -12,7 +12,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "user")
-public class UserEntity {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,16 +25,16 @@ public class UserEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", referencedColumnName = "id", unique = true)
-    private AccountEntity account;
+    private Account account;
 
     @OneToMany()
-    Set<UserEntity> friends;
+    Set<User> friends;
 
     @OneToMany(mappedBy = "debtor")
-    Set<TransactionEntity> debtorTransaction;
+    Set<Transaction> debtorTransaction;
 
     @OneToMany(mappedBy = "creditor")
-    Set<TransactionEntity> creditorTransaction;
+    Set<Transaction> creditorTransaction;
 
-    public UserEntity() {}
+    public User() {}
 }

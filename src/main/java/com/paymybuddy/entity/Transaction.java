@@ -12,17 +12,17 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "transaction")
-public class TransactionEntity {
+public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
-    private UserEntity debtor;
+    private User debtor;
 
     @ManyToOne
-    private UserEntity creditor;
+    private User creditor;
 
     private String description;
     private Float amount;
@@ -31,5 +31,5 @@ public class TransactionEntity {
     @Column(name="date", columnDefinition="TIMESTAMP")
     private LocalDate date;
 
-    public TransactionEntity() {}
+    public Transaction() {}
 }
