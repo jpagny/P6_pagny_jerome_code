@@ -1,10 +1,11 @@
-package com.paymybuddy.service;
+package com.paymybuddy.service.implement;
 
 import com.paymybuddy.entity.Transaction;
 import com.paymybuddy.entity.User;
 import com.paymybuddy.exception.ResourceIsAlreadyPresentException;
 import com.paymybuddy.exception.ResourceNotFoundException;
 import com.paymybuddy.repository.UserRepository;
+import com.paymybuddy.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService {
-
     private final UserRepository userRepository;
 
     @Override
@@ -33,7 +33,7 @@ public class UserService implements IUserService {
 
         Optional<User> updatedUser = userRepository.findByEmailAddress(user.getEmailAddress());
 
-        if (updatedUser.isEmpty()){
+        if (updatedUser.isEmpty()) {
             throw new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress());
         }
 
@@ -51,7 +51,7 @@ public class UserService implements IUserService {
 
         Optional<User> deletedUser = userRepository.findByEmailAddress(user.getEmailAddress());
 
-        if (deletedUser.isEmpty()){
+        if (deletedUser.isEmpty()) {
             throw new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress());
         }
 
@@ -64,16 +64,16 @@ public class UserService implements IUserService {
         Optional<User> theUser = userRepository.findByEmailAddress(user.getEmailAddress());
         Optional<User> theFriend = userRepository.findByEmailAddress(friend.getEmailAddress());
 
-        if (theUser.isEmpty()){
+        if (theUser.isEmpty()) {
             throw new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress());
         }
 
-        if (theFriend.isEmpty()){
+        if (theFriend.isEmpty()) {
             throw new ResourceNotFoundException("User doesn't exist with given email : " + friend.getEmailAddress());
         }
 
-        if ( user.getFriends().contains(friend) ){
-            throw new ResourceIsAlreadyPresentException("User "  + user.getEmailAddress() + " is already friend with " + friend.getEmailAddress());
+        if (user.getFriends().contains(friend)) {
+            throw new ResourceIsAlreadyPresentException("User " + user.getEmailAddress() + " is already friend with " + friend.getEmailAddress());
         }
 
         user.getFriends().add(friend);

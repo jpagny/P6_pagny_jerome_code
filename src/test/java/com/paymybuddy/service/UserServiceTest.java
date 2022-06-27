@@ -6,6 +6,7 @@ import com.paymybuddy.entity.User;
 import com.paymybuddy.exception.ResourceIsAlreadyPresentException;
 import com.paymybuddy.exception.ResourceNotFoundException;
 import com.paymybuddy.repository.UserRepository;
+import com.paymybuddy.service.implement.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,6 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class UserServiceTest {
-
     private UserService userService;
 
     @Mock
@@ -92,7 +92,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Should be returned nothing when user is deleted")
-    public void should_beReturnedNothing_when_userIsDeleted(){
+    public void should_beReturnedNothing_when_userIsDeleted() {
         User user = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
         when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(user));
         doNothing().when(userRepository).delete(user);
@@ -117,6 +117,7 @@ public class UserServiceTest {
 
         assertTrue(actualMessage.contains(expectedMessage));
     }
+
     @Test
     @DisplayName("Should be returned the friend added when a new friend is added")
     public void should_beReturnedTheFriendAdded_when_aNewFriendIsAdded() throws ResourceNotFoundException, ResourceIsAlreadyPresentException {
@@ -124,37 +125,37 @@ public class UserServiceTest {
         User friend = new User(4, "nicolas", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
         when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(friend));
 
-        User friendAdded = userService.addFriend(user,friend);
+        User friendAdded = userService.addFriend(user, friend);
 
-        assertEquals(friendAdded,friend);
+        assertEquals(friendAdded, friend);
         assertTrue(user.getFriends().contains(friend));
     }
 
     @Test
     @DisplayName("Should be returned the transaction debtor when a new transaction debtor is added")
-    public void should_beReturnedTheTransactionDebtor_when_aNewTransactionDebtorIsAdded(){
+    public void should_beReturnedTheTransactionDebtor_when_aNewTransactionDebtorIsAdded() {
         User debtor = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
         User creditor = new User(2, "nicolas", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
-        Transaction transaction = new Transaction(1,debtor,creditor,"Rbt pizza",100,0.05, LocalDate.now());
+        Transaction transaction = new Transaction(1, debtor, creditor, "Rbt pizza", 100, 0.05, LocalDate.now());
         when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(debtor));
 
         Transaction transactionAdded = userService.addTransaction(transaction);
 
-        assertEquals(transactionAdded,transaction);
+        assertEquals(transactionAdded, transaction);
         assertTrue(debtor.getDebtorTransaction().contains(transactionAdded));
     }
 
     @Test
     @DisplayName("Should be returned the transaction creditor when a new transaction creditor is added")
-    public void should_beReturnedTheTransactionCreditor_when_aNewTransactionCreditorIsAdded(){
+    public void should_beReturnedTheTransactionCreditor_when_aNewTransactionCreditorIsAdded() {
         User creditor = new User(2, "nicolas", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
         User debtor = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
-        Transaction transaction = new Transaction(1,debtor,creditor,"Rbt pizza",100,0.05, LocalDate.now());
+        Transaction transaction = new Transaction(1, debtor, creditor, "Rbt pizza", 100, 0.05, LocalDate.now());
         when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(creditor));
 
         Transaction transactionAdded = userService.addTransaction(transaction);
 
-        assertEquals(transactionAdded,transaction);
+        assertEquals(transactionAdded, transaction);
         assertTrue(creditor.getCreditorTransaction().contains(transactionAdded));
     }
 

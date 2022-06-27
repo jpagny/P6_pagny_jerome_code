@@ -10,8 +10,6 @@ import java.util.Set;
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmailAddress(String emailAddress);
     Set<User> friends(User user);
-
     Set<Transaction> debtorTransaction(User user);
-
     Set<Transaction> creditorTransaction(User user);
 }
