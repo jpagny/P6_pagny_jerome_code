@@ -22,8 +22,9 @@ public class HomeController {
 
         Optional<User> user = userService.findByAddressEmail(authentication.getName());
 
-        model.addAttribute("userFirstName", StringUtils.capitalize(user.get().getFirstName()));
-        model.addAttribute("userLastName", StringUtils.capitalize(user.get().getLastName().toUpperCase()));
+        model.addAttribute("userName", StringUtils.capitalize(user.get().getFirstName()
+                + " "
+                + StringUtils.capitalize(user.get().getLastName())));
         model.addAttribute("listFriend", user.get().getFriends());
 
         return "home";
