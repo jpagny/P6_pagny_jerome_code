@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 
-@Service
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired

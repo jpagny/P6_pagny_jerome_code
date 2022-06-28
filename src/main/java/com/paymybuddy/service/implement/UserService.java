@@ -17,6 +17,11 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
 
     @Override
+    public Optional<User> findByAddressEmail(String addressEmail) {
+        return userRepository.findByEmailAddress(addressEmail);
+    }
+
+    @Override
     public User create(User user) throws ResourceIsAlreadyPresentException {
 
         Optional<User> savedUser = userRepository.findByEmailAddress(user.getEmailAddress());
