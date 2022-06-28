@@ -5,9 +5,11 @@ import com.paymybuddy.entity.Account;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest
 public class AccountModelMapperTest {
 
     private final ModelMapper modelMapper = new ModelMapper();

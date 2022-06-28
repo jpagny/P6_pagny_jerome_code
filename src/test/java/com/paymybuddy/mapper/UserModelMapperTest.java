@@ -6,11 +6,13 @@ import com.paymybuddy.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest
 public class UserModelMapperTest {
 
     private final ModelMapper modelMapper = new ModelMapper();
