@@ -1,6 +1,6 @@
 package com.paymybuddy.service.implement;
 
-import com.paymybuddy.entity.Account;
+import com.paymybuddy.constant.Free;
 import com.paymybuddy.entity.Transaction;
 import com.paymybuddy.entity.User;
 import com.paymybuddy.exception.ResourceNotFoundException;
@@ -16,16 +16,20 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class TransactionService implements ITransactionService {
-
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
+
+    private final String DEBTOR = "debtor";
+    private final String CREDITOR = "creditor";
 
     @Override
     public Transaction create(Transaction transaction) throws Exception {
 
         Optional<User> debtor = userRepository.findByEmailAddress(transaction.getDebtor().getEmailAddress());
         Optional<User> creditor = userRepository.findByEmailAddress(transaction.getCreditor().getEmailAddress());
+        double newSoldDebtor;
+        double newSoldCreditor;
 
         if (debtor.isEmpty()) {
             throw new ResourceNotFoundException("Debtor doesn't exist with given email : " + transaction.getDebtor().getEmailAddress());
@@ -35,27 +39,44 @@ public class TransactionService implements ITransactionService {
             throw new ResourceNotFoundException("Creditor doesn't exist with given email : " + transaction.getCreditor().getEmailAddress());
         }
 
-        Account debtorAccount = debtor.get().getAccount();
-        Account creditorAccount = creditor.get().getAccount();
+        newSoldDebtor = calculateNewSold(DEBTOR, debtor.get().getAccount().getBalance(), transaction.getAmount());
+        newSoldCreditor = calculateNewSold(CREDITOR, creditor.get().getAccount().getBalance(), transaction.getAmount());
 
-        double soldeDebtor = debtorAccount.getBalance();
-        double soldeCreditor = creditorAccount.getBalance();
-
-        double newSoldeDebtor = soldeDebtor - transaction.getAmount(); // add free
-        double newSoldeCreditor = soldeCreditor + transaction.getAmount();
-
-        if (soldeDebtor - transaction.getAmount() < 0) {
+        if (newSoldDebtor < 0) {
             throw new Exception("Not enough money on account");
         }
 
-        debtorAccount.setBalance(newSoldeDebtor);
-        creditorAccount.setBalance(newSoldeCreditor);
+        debtor.get().getAccount().setBalance(newSoldDebtor);
+        creditor.get().getAccount().setBalance(newSoldCreditor);
 
-        accountRepository.save(debtorAccount);
-        accountRepository.save(creditorAccount);
+        accountRepository.save(debtor.get().getAccount());
+        accountRepository.save(creditor.get().getAccount());
         transactionRepository.save(transaction);
 
         return transaction;
     }
+
+    private double calculateNewSold(String type, double soldActual, double amount) throws Exception {
+        if (type.equalsIgnoreCase(DEBTOR)) {
+            return calculateNewSoldDebtor(soldActual, amount);
+        } else if (type.equalsIgnoreCase(CREDITOR)) {
+            return calculateNewSoldCreditor(soldActual, amount);
+        } else {
+            throw new Exception("Unknown user type : " + type);
+        }
+    }
+
+    private double calculateNewSoldDebtor(double soldActual, double amount) {
+        return soldActual - amount - calculateFreeTransaction(amount);
+    }
+
+    private double calculateNewSoldCreditor(double soldActual, double amount) {
+        return soldActual + amount;
+    }
+
+    private double calculateFreeTransaction(double amountTransaction) {
+        return amountTransaction * Free.FREE_0_05;
+    }
+
 
 }
