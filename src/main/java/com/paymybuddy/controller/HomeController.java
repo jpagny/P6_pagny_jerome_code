@@ -9,7 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 public class HomeController {
@@ -21,11 +24,13 @@ public class HomeController {
     public String getHome(Authentication authentication, Model model) {
 
         Optional<User> user = userService.findByAddressEmail(authentication.getName());
+        Set<User> friends = user.get().getFriends();
 
         model.addAttribute("userName", StringUtils.capitalize(user.get().getFirstName()
                 + " "
                 + StringUtils.capitalize(user.get().getLastName())));
-        model.addAttribute("listFriend", user.get().getFriends());
+
+        model.addAttribute("friendList", friends);
 
         return "home";
     }
