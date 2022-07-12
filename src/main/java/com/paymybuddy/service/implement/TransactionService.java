@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -28,31 +26,27 @@ public class TransactionService implements ITransactionService {
     @Override
     public Transaction create(Transaction transaction) throws Exception {
 
-        Optional<User> debtor = userRepository.findByEmailAddress(transaction.getDebtor().getEmailAddress());
-        Optional<User> creditor = userRepository.findByEmailAddress(transaction.getCreditor().getEmailAddress());
+        User debtor = userRepository.findByEmailAddress(transaction.getDebtor().getEmailAddress())
+                .orElseThrow(() -> new ResourceNotFoundException("Debtor doesn't exist with given email : " + transaction.getDebtor().getEmailAddress()));
+
+        User creditor = userRepository.findByEmailAddress(transaction.getCreditor().getEmailAddress())
+                .orElseThrow(() -> new ResourceNotFoundException("Creditor doesn't exist with given email : " + transaction.getDebtor().getEmailAddress()));
+
         double newSoldDebtor;
         double newSoldCreditor;
 
-        if (debtor.isEmpty()) {
-            throw new ResourceNotFoundException("Debtor doesn't exist with given email : " + transaction.getDebtor().getEmailAddress());
-        }
-
-        if (creditor.isEmpty()) {
-            throw new ResourceNotFoundException("Creditor doesn't exist with given email : " + transaction.getCreditor().getEmailAddress());
-        }
-
-        newSoldDebtor = calculateNewSold(DEBTOR, debtor.get().getAccount().getBalance(), transaction.getAmount());
-        newSoldCreditor = calculateNewSold(CREDITOR, creditor.get().getAccount().getBalance(), transaction.getAmount());
+        newSoldDebtor = calculateNewSold(DEBTOR, debtor.getAccount().getBalance(), transaction.getAmount());
+        newSoldCreditor = calculateNewSold(CREDITOR, creditor.getAccount().getBalance(), transaction.getAmount());
 
         if (newSoldDebtor < 0) {
             throw new Exception("Not enough money on account");
         }
 
-        debtor.get().getAccount().setBalance(newSoldDebtor);
-        creditor.get().getAccount().setBalance(newSoldCreditor);
+        debtor.getAccount().setBalance(newSoldDebtor);
+        creditor.getAccount().setBalance(newSoldCreditor);
 
-        accountRepository.save(debtor.get().getAccount());
-        accountRepository.save(creditor.get().getAccount());
+        accountRepository.save(debtor.getAccount());
+        accountRepository.save(creditor.getAccount());
         transactionRepository.save(transaction);
 
         return transaction;
