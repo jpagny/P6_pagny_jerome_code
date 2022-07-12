@@ -10,11 +10,13 @@ import com.paymybuddy.repository.UserRepository;
 import com.paymybuddy.service.ITransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TransactionService implements ITransactionService {
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
