@@ -23,7 +23,7 @@ public class User {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", referencedColumnName = "iban", unique = true)
     private Account account;
-    @OneToMany()
+    @ManyToMany()
     private Set<User> friends;
     @OneToMany(mappedBy = "debtor")
     private Set<Transaction> debtorTransaction;

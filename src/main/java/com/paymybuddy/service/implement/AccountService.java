@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -19,8 +21,11 @@ public class AccountService implements IAccountService {
     @Override
     public Account create(Account account) throws ResourceIsAlreadyPresentException {
 
-        accountRepository.findById(account.getIban())
-                .orElseThrow(() -> new ResourceIsAlreadyPresentException("Account already exist"));
+        Optional<Account> accountToCreate = accountRepository.findById(account.getIban());
+
+        if ( accountToCreate.isPresent() ) {
+            new ResourceIsAlreadyPresentException("Account already exist");
+        }
 
         return accountRepository.save(account);
     }
