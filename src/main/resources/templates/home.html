@@ -27,10 +27,10 @@
             <!-- START my name and amount -->
             <div class="row">
                 <div class="col-md-9">
-                    <h5>Bonjour <td th:text="${userName}">UserName</td></h5>
+                    <h5>Hello <td th:text="${userName}">UserName</td></h5>
                 </div>
                 <div class="col-md-3">
-                    <h5>Vous avez <td th:text="${account.getBalance()}">Amount</td> euros</h5>
+                    <h5>Your balance is <td th:text="${account.getBalance()}">Amount</td> euros</h5>
                 </div>
             </div>
             <!-- END my name and amount -->
@@ -38,29 +38,7 @@
 
             <!-- START transaction creditor list -->
             <div class="table-responsive">
-                <h5>Ma liste des transactions en tant créditeur</h5>
-                <table class="table table-striped table-hover mt-3">
-                    <thead>
-                    <tr class="bg-success text-white">
-                        <th>Connection</th>
-                        <th>Description</th>
-                        <th>Amount</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="transaction: ${transactionCreditorList}" >
-                        <td th:text="${transaction.getCreditor().getFirstName()}">Connection</td>
-                        <td th:text="${transaction.getDescription()}">Description</td>
-                        <td th:text="${transaction.getAmount()+'€'}">Amount</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <!-- END transaction creditor list -->
-            <br/><br/>
-            <!-- START transaction debtor list -->
-            <div class="table-responsive">
-                <h5>Ma liste des transactions en tant débiteur</h5>
+                <h5>My list of transactions as a creditor</h5>
                 <table class="table table-striped table-hover mt-3">
                     <thead>
                     <tr class="bg-success text-white">
@@ -72,6 +50,28 @@
                     <tbody>
                     <tr th:each="transaction: ${transactionDebtorList}" >
                         <td th:text="${transaction.getDebtor().getFirstName()}">Connection</td>
+                        <td th:text="${transaction.getDescription()}">Description</td>
+                        <td th:text="${transaction.getAmount()+'€'}">Amount</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- END transaction creditor list -->
+            <br/><br/>
+            <!-- START transaction debtor list -->
+            <div class="table-responsive">
+                <h5>My list of transactions as a debtor</h5>
+                <table class="table table-striped table-hover mt-3">
+                    <thead>
+                    <tr class="bg-success text-white">
+                        <th>Connection</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="transaction: ${transactionCreditorList}" >
+                        <td th:text="${transaction.getCreditor().getFirstName()}">Connection</td>
                         <td th:text="${transaction.getDescription()}">Description</td>
                         <td th:text="${transaction.getAmount()+'€'}">Amount</td>
                     </tr>

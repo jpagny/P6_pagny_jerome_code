@@ -22,6 +22,8 @@ public class UserDTO {
     private Set<Transaction> creditorTransaction;
     private String iban;
 
+    private Double initialBalance;
+
     public UserDTO() {
     }
 }
