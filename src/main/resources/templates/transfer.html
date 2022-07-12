@@ -65,7 +65,11 @@
                 </div>
                 <div id="addFriend" style="display: block;background-color: #eeeeee;padding:1em;">
 
-                    <form class="form-group" th:action="@{/transfer}" method="POST" th:object="${transaction}">
+                    <form class="form-group" th:action="@{/addFriend}" method="POST" th:object="${friend}">
+                        <div class="alert alert-success" th:if="${message}" th:text="${message}">
+                        </div>
+                        <div class="alert alert-danger" th:if="${signupError}" th:text="${signupError}">
+                        </div>
                         <div class="row">
                             <div class="col-md-10">
                                 <div class="form-group">

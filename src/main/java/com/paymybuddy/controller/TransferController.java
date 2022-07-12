@@ -1,6 +1,7 @@
 package com.paymybuddy.controller;
 
 import com.paymybuddy.dto.TransactionDTO;
+import com.paymybuddy.dto.UserDTO;
 import com.paymybuddy.entity.Transaction;
 import com.paymybuddy.entity.User;
 import com.paymybuddy.exception.ResourceNotFoundException;
@@ -16,6 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashSet;
 import java.util.Set;
