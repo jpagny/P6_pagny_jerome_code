@@ -26,7 +26,7 @@ public class FriendController {
     public String addFriend(Authentication authentication,
                             @ModelAttribute("friend") UserDTO friend, RedirectAttributes redirectAttributes, Model model) throws Exception {
 
-        String signupError = null;
+        String addFriendError = null;
 
         User auth = userService.findByAddressEmail(authentication.getName()).orElseThrow(ResourceNotFoundException::new);
         Optional<User> friendToAdd = userService.findByAddressEmail(friend.getEmailAddress());
@@ -34,15 +34,19 @@ public class FriendController {
         try {
             userService.addFriend(auth, friendToAdd.get());
         } catch (ResourceIsAlreadyPresentException ex) {
-            signupError = "You are already friend with this address email : " + friend.getEmailAddress() + ".";
+            addFriendError = "You are already friend with this address email : " + friend.getEmailAddress() + ".";
+
         } catch (NoSuchElementException ex){
-            signupError = "The email doesn't exist in our database";
+            addFriendError = ex.getMessage();
+
         }
 
-        if (signupError != null) {
-            redirectAttributes.addFlashAttribute("signupError", signupError);
+        if (addFriendError != null) {
+            redirectAttributes.addFlashAttribute("addFriendError", addFriendError);
+
         } else {
-            redirectAttributes.addFlashAttribute("message", "You've successfully added friend.");
+            redirectAttributes.addFlashAttribute("addFriendSuccess", "You've successfully added friend.");
+
         }
 
         return "redirect:/transfer";

@@ -19,6 +19,7 @@ import java.util.Optional;
 @Transactional
 public class UserService implements IUserService {
     private final UserRepository userRepository;
+    private final TransactionService transactionService;
 
     @Override
     public Optional<User> findByAddressEmail(String addressEmail) {

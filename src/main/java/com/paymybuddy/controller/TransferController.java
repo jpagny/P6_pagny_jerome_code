@@ -1,11 +1,9 @@
 package com.paymybuddy.controller;
 
 import com.paymybuddy.dto.TransactionDTO;
-import com.paymybuddy.dto.UserDTO;
 import com.paymybuddy.entity.Transaction;
 import com.paymybuddy.entity.User;
 import com.paymybuddy.exception.ResourceNotFoundException;
-import com.paymybuddy.repository.TransactionRepository;
 import com.paymybuddy.service.implement.TransactionService;
 import com.paymybuddy.service.implement.UserService;
 import org.modelmapper.ModelMapper;
@@ -28,6 +26,9 @@ public class TransferController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TransactionService transactionService;
+
     @GetMapping("/transfer")
     public String getTransferPage(Authentication authentication, Model model) throws ResourceNotFoundException {
 
@@ -47,25 +48,37 @@ public class TransferController {
 
     @PostMapping("/transfer")
     public String sendMoney(Authentication authentication,
-                            @ModelAttribute("newTransfer") TransactionDTO transactionDTO, Model model) throws Exception {
+                            @ModelAttribute("transaction") TransactionDTO transactionDTO, RedirectAttributes redirectAttributes) {
 
-        boolean isFriend = false;
+        String transactionError = null;
 
-        // check if debtor exists
-        User auth = userService.findByAddressEmail(authentication.getName()).orElseThrow(ResourceNotFoundException::new);
+        try {
 
-        // check if creditor exists
-        User creditor = userService.findByAddressEmail(transactionDTO.getCreditor().getEmailAddress()).orElseThrow(ResourceNotFoundException::new);
+            User auth = userService.findByAddressEmail(authentication.getName()).orElseThrow(ResourceNotFoundException::new);
+            User creditor = userService.findByAddressEmail(transactionDTO.getCreditorEmailAddress()).orElseThrow(ResourceNotFoundException::new);
 
-        // check if they are friends
-        isFriend = auth.getFriends().contains(creditor);
-
-        if (isFriend){
+            transactionDTO.setDebtor(auth);
+            transactionDTO.setCreditor(creditor);
             Transaction transaction = new ModelMapper().map(transactionDTO, Transaction.class);
-            userService.addTransaction(transaction);
+            transactionService.create(transaction);
+
+        } catch (ResourceNotFoundException ex) {
+            transactionError = ex.getMessage();
+
+        } catch (Exception ex) {
+            transactionError = ex.getMessage();
+
         }
 
-        return "result";
+        if (transactionError != null) {
+            redirectAttributes.addFlashAttribute("transactionError", transactionError);
+
+        } else {
+            redirectAttributes.addFlashAttribute("transactionSuccess", "You've successfully added transaction.");
+
+        }
+
+        return "redirect:/transfer";
     }
 
 }

@@ -66,9 +66,9 @@
                 <div id="addFriend" style="display: block;background-color: #eeeeee;padding:1em;">
 
                     <form class="form-group" th:action="@{/addFriend}" method="POST" th:object="${friend}">
-                        <div class="alert alert-success" th:if="${message}" th:text="${message}">
+                        <div class="alert alert-success" th:if="${addFriendSuccess}" th:text="${addFriendSuccess}">
                         </div>
-                        <div class="alert alert-danger" th:if="${signupError}" th:text="${signupError}">
+                        <div class="alert alert-danger" th:if="${addFriendError}" th:text="${addFriendError}">
                         </div>
                         <div class="row">
                             <div class="col-md-10">
@@ -97,13 +97,15 @@
                 <div id="transfer" style="display: block;background-color: #eeeeee;padding:1em;">
 
                     <form class="form-group" th:action="@{/transfer}" method="POST" th:object="${transaction}">
-                        <input type="hidden" name="userAccount"
-                               id="user-account">
+                        <div class="alert alert-success" th:if="${transactionSuccess}" th:text="${transactionSuccess}">
+                        </div>
+                        <div class="alert alert-danger" th:if="${transactionError}" th:text="${transactionError}">
+                        </div>
                         <div class="row mb-2">
                             <div class="col-md-4">
-                                <select id="toEmail" name="toEmail"  class="custom-select" required>
+                                <select id="toEmail" name="creditorEmailAddress"  class="custom-select" required>
                                     <option value="" selected disabled hidden>Select A Connection</option>
-                                    <option th:each="friend : ${friendList}" th:value="${friend.getEmailAddress()}" th:text="${friend.getEmailAddress()}">Email</option>
+                                    <option th:each="creditor : ${friendList}" th:value="${creditor.getEmailAddress()}" th:text="${creditor.getEmailAddress()}">Email</option>
                                 </select>
                             </div>
                             <div class="col-md-2">
