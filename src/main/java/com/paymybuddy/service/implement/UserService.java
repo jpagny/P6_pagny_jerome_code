@@ -1,5 +1,6 @@
 package com.paymybuddy.service.implement;
 
+import com.paymybuddy.dto.UserDTO;
 import com.paymybuddy.entity.Transaction;
 import com.paymybuddy.entity.User;
 import com.paymybuddy.exception.ResourceIsAlreadyPresentException;
@@ -7,6 +8,7 @@ import com.paymybuddy.exception.ResourceNotFoundException;
 import com.paymybuddy.repository.UserRepository;
 import com.paymybuddy.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -29,6 +31,19 @@ public class UserService implements IUserService {
         if (savedUser.isPresent()) {
             throw new ResourceIsAlreadyPresentException("User already exist with given email : " + user.getEmailAddress());
         }
+
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User create(UserDTO userDTO) {
+        User user = new User();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName((userDTO.getLastName()));
+        user.setEmailAddress(userDTO.getEmailAddress());
+        user.setPassword(encoder.encode(userDTO.getPassword()));
 
         return userRepository.save(user);
     }
