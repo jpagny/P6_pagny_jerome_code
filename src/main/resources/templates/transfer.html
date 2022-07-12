@@ -56,19 +56,43 @@
         <div class="row">
             <!-- BEGIN col -->
             <div class="col">
+
+                <!-- START ADD FRIEND -->
+                <div class="row">
+                    <div class="col-md-10">
+                        <h5>Add friends</h5>
+                    </div>
+                </div>
+                <div id="addFriend" style="display: block;background-color: #eeeeee;padding:1em;">
+
+                    <form class="form-group" th:action="@{/transfer}" method="POST" th:object="${transaction}">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" name="emailAddress" class="form-control" id="inputEmail" placeholder="&#xf0e0; &nbsp;&nbsp;Email" style="font-family:Arial, FontAwesome"  required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <button type="submit" name="transfer" class="btn btn-success" value="Transfer">Add</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+                <!-- END ADD FRIEND -->
+                <br/><br/>
+
                 <!-- START send money -->
                 <div class="row">
                     <div class="col-md-10">
                         <h5>Send Money</h5>
                     </div>
-                    <div class="col-md-2">
-                        <button>Add new friend</button>
-                    </div>
                 </div>
 
                 <div id="transfer" style="display: block;background-color: #eeeeee;padding:1em;">
 
-                    <form class="form-group" th:action="@{/transfer}" method="POST">
+                    <form class="form-group" th:action="@{/transfer}" method="POST" th:object="${transaction}">
                         <input type="hidden" name="userAccount"
                                id="user-account">
                         <div class="row mb-2">
@@ -92,19 +116,37 @@
                     </form>
                 </div>
                 <!-- END send money -->
+
+                <!-- START transaction list -->
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mt-3">
+                        <thead>
+                        <tr class="bg-success text-white">
+                            <th>Connection</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="transaction: ${transactionList}" >
+                            <td th:text="${transaction.getCreditor().getFirstName()}">Connection</td>
+                            <td th:text="${transaction.getDescription()}">Description</td>
+                            <td th:text="${transaction.getAmount()+'€'}">Amount</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END transaction list -->
+
             </div>
             <!-- END col-->
         </div>
         <!-- END row -->
 
-
     </div>
     <!-- END container -->
 
-
-
-
     <script th:src="@{/js/popper.min.js}"></script>
-<script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
 </body>
 </html>
