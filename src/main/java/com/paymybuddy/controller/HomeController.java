@@ -10,9 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.Optional;
-import java.util.Set;
-
 @Controller
 public class HomeController {
 

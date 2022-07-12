@@ -42,7 +42,7 @@ public class SignUpController {
         if (existsUser.isPresent()) {
             signupError = "The email already exists";
         } else {
-            Account account = new Account(user.getIban(),user.getInitialBalance());
+            Account account = new Account(user.getIban(), user.getInitialBalance());
             Account accountSaved = accountService.create(account);
             user.setAccount(accountSaved);
             userService.create(user);

@@ -36,7 +36,7 @@ public class FriendController {
         } catch (ResourceIsAlreadyPresentException ex) {
             addFriendError = "You are already friend with this address email : " + friend.getEmailAddress() + ".";
 
-        } catch (NoSuchElementException ex){
+        } catch (NoSuchElementException ex) {
             addFriendError = ex.getMessage();
 
         }
