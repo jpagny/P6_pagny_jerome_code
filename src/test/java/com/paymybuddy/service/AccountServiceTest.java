@@ -32,8 +32,8 @@ public class AccountServiceTest {
     @Test
     @DisplayName("Should be returned account when a new account is created")
     public void should_BeReturnedNewAccount_When_ANewAccountIsCreated() throws ResourceIsAlreadyPresentException {
-        Account account = new Account(1, 100);
-        when(accountRepository.findById(any(int.class))).thenReturn(Optional.empty());
+        Account account = new Account("xxx", 100);
+        when(accountRepository.findById(any(String.class))).thenReturn(Optional.empty());
         when(accountRepository.save(any(Account.class))).thenReturn(account);
 
         Account newAccount = accountService.create(account);
@@ -44,8 +44,8 @@ public class AccountServiceTest {
     @Test
     @DisplayName("Should be exception when account created is already exist in our database")
     public void should_beException_When_AccountCreatedIsAlreadyExistInOurDatabase() {
-        Account account = new Account(1, 100);
-        when(accountRepository.findById(any(int.class))).thenReturn(Optional.of(account));
+        Account account = new Account("xxx", 100);
+        when(accountRepository.findById(any(String.class))).thenReturn(Optional.of(account));
         when(accountRepository.save(any(Account.class))).thenReturn(account);
         Exception exception = assertThrows(ResourceIsAlreadyPresentException.class, () ->
                 accountService.create(account)

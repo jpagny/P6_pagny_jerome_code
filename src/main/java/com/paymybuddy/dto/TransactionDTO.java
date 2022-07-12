@@ -10,9 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class TransactionDTO {
     private long id;
-
     private User debtor;
-
     private User creditor;
     private String creditorEmailAddress;
     private String description;

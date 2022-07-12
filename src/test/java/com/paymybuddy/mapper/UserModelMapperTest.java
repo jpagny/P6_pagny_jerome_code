@@ -38,7 +38,7 @@ public class UserModelMapperTest {
     @Test
     @DisplayName("Should be mapped by User DTO to User entity when ModelMapper is called")
     public void shouldBeMappedByDTOToEntity_WhenModelMapperIsCalled() {
-        UserDTO userDTO = new UserDTO(1, "Pagny", "Jerome", "pagny.jerome@gmail.com", "xx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        UserDTO userDTO = new UserDTO(1L, "Pagny", "Jerome", "pagny.jerome@gmail.com", "xx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>(), "",0.0);
 
         User user = modelMapper.map(userDTO, User.class);
 

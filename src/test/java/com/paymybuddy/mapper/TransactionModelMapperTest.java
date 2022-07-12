@@ -36,7 +36,7 @@ public class TransactionModelMapperTest {
     @Test
     @DisplayName("Should be mapped by Transaction DTO to Transaction entity when ModelMapper is called")
     public void shouldBeMappedByDTOToEntity_WhenModelMapperIsCalled() {
-        TransactionDTO transactionDTO = new TransactionDTO(1, new User(), new User(), "Test", 100, 0.05, LocalDate.now());
+        TransactionDTO transactionDTO = new TransactionDTO(1L, new User(), new User(), "", "Test", 100, 0.05, LocalDate.now());
 
         Transaction transaction = modelMapper.map(transactionDTO, Transaction.class);
 

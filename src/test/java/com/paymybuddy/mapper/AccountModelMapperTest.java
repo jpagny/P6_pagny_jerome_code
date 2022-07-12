@@ -17,22 +17,22 @@ public class AccountModelMapperTest {
     @Test
     @DisplayName("Should be mapped by Account entity to Account DTO when ModelMapper is called")
     public void shouldBeMappedByEntityToDTO_WhenModelMapperIsCalled() {
-        Account account = new Account(1, 100);
+        Account account = new Account("XXX-CCC-BBB", 100);
 
         AccountDTO accountDTO = modelMapper.map(account, AccountDTO.class);
 
-        assertEquals(accountDTO.getId(), account.getId());
+        assertEquals(accountDTO.getIban(), account.getIban());
         assertEquals(accountDTO.getBalance(), account.getBalance());
     }
 
     @Test
     @DisplayName("Should be mapped by Account DTO to Account entity when ModelMapper is called")
     public void shouldBeMappedByDTOToEntity_WhenModelMapperIsCalled() {
-        AccountDTO accountDTO = new AccountDTO(1, 100);
+        AccountDTO accountDTO = new AccountDTO("xxx", 100);
 
         Account account = modelMapper.map(accountDTO, Account.class);
 
-        assertEquals(account.getId(), accountDTO.getId());
+        assertEquals(account.getIban(), accountDTO.getIban());
         assertEquals(account.getBalance(), accountDTO.getBalance());
     }
 }

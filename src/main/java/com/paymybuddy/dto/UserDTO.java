@@ -11,7 +11,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 public class UserDTO {
-    private long id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String emailAddress;
@@ -21,7 +21,6 @@ public class UserDTO {
     private Set<Transaction> debtorTransaction;
     private Set<Transaction> creditorTransaction;
     private String iban;
-
     private Double initialBalance;
 
     public UserDTO() {

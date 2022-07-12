@@ -44,8 +44,8 @@ public class TransactionServiceTest {
     @Test
     @DisplayName("Should be returned transaction when a new transaction is created")
     public void should_BeReturnedNewUser_When_ANewUserIsCreated() throws Exception {
-        User debtor = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(1, 200), new HashSet<>(), new HashSet<>(), new HashSet<>());
-        User creditor = new User(1, "nicolas", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(2, 300), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User debtor = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account("xxx", 200), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User creditor = new User(1, "nicolas", "pagny", "pagny.jerome@gmail.com", "xxx", new Account("ccc", 300), new HashSet<>(), new HashSet<>(), new HashSet<>());
         Transaction transaction = new Transaction(1, debtor, creditor, "xxx", 50, 0.05, LocalDate.now());
         when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(debtor));
         when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
@@ -58,8 +58,8 @@ public class TransactionServiceTest {
     @Test
     @DisplayName("Should be exception when debtor doesn't exist in our database")
     public void should_beException_when_debtorDoesntExistInOurDatabase() {
-        User debtor = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(1, 200), new HashSet<>(), new HashSet<>(), new HashSet<>());
-        User creditor = new User(1, "nicolas", "pagny", "pagny.nicolas@gmail.com", "xxx", new Account(2, 300), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User debtor = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account("xxx", 200), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User creditor = new User(1, "nicolas", "pagny", "pagny.nicolas@gmail.com", "xxx", new Account("ccc", 300), new HashSet<>(), new HashSet<>(), new HashSet<>());
         Transaction transaction = new Transaction(1, debtor, creditor, "xxx", 50, 0.05, LocalDate.now());
         when(userRepository.findByEmailAddress("pagny.jerome@gmail.com")).thenReturn(Optional.empty());
         when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
@@ -77,8 +77,8 @@ public class TransactionServiceTest {
     @Test
     @DisplayName("Should be exception when creditor doesn't exist in our database")
     public void should_beException_when_creditorDoesntExistInOurDatabase() {
-        User debtor = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(1, 200), new HashSet<>(), new HashSet<>(), new HashSet<>());
-        User creditor = new User(1, "nicolas", "pagny", "pagny.nicolas@gmail.com", "xxx", new Account(2, 300), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User debtor = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account("xxx", 200), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User creditor = new User(1, "nicolas", "pagny", "pagny.nicolas@gmail.com", "xxx", new Account("ccc", 300), new HashSet<>(), new HashSet<>(), new HashSet<>());
         Transaction transaction = new Transaction(1, debtor, creditor, "xxx", 50, 0.05, LocalDate.now());
         when(userRepository.findByEmailAddress("pagny.jerome@gmail.com")).thenReturn(Optional.of(debtor));
         when(userRepository.findByEmailAddress("pagny.nicolas@gmail.com")).thenReturn(Optional.empty());
@@ -97,8 +97,8 @@ public class TransactionServiceTest {
     @Test
     @DisplayName("Should be exception when debtor haven't enough money")
     public void should_BeException_when_debtorHaventEnoughMoney() {
-        User debtor = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(1, 50), new HashSet<>(), new HashSet<>(), new HashSet<>());
-        User creditor = new User(1, "nicolas", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(2, 300), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User debtor = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account("xxx", 50), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User creditor = new User(1, "nicolas", "pagny", "pagny.jerome@gmail.com", "xxx", new Account("ccc", 300), new HashSet<>(), new HashSet<>(), new HashSet<>());
         Transaction transaction = new Transaction(1, debtor, creditor, "xxx", 100, 0.05, LocalDate.now());
         when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(debtor));
         when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
@@ -116,8 +116,8 @@ public class TransactionServiceTest {
     @Test
     @DisplayName("Should be valid sold when there is a transaction")
     public void should_beValidSold_when_thereIsATransaction() throws Exception {
-        User debtor = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(1, 300), new HashSet<>(), new HashSet<>(), new HashSet<>());
-        User creditor = new User(2, "nicolas", "pagny", "pagny.nicolas@gmail.com", "xxx", new Account(2, 50), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User debtor = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account("xxx", 300), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User creditor = new User(2, "nicolas", "pagny", "pagny.nicolas@gmail.com", "xxx", new Account("ccc", 50), new HashSet<>(), new HashSet<>(), new HashSet<>());
         Transaction transaction = new Transaction(1, debtor, creditor, "xxx", 100, 0.05, LocalDate.now());
         when(userRepository.findByEmailAddress("pagny.jerome@gmail.com")).thenReturn(Optional.of(debtor));
         when(userRepository.findByEmailAddress("pagny.nicolas@gmail.com")).thenReturn(Optional.of(creditor));
