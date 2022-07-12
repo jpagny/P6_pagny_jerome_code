@@ -1,6 +1,7 @@
 package com.paymybuddy.controller;
 
 import com.paymybuddy.entity.User;
+import com.paymybuddy.exception.ResourceNotFoundException;
 import com.paymybuddy.service.implement.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -19,16 +20,16 @@ public class HomeController {
     private UserService userService;
 
     @GetMapping("/home")
-    public String getHome(Authentication authentication, Model model) {
+    public String getHomePage(Authentication authentication, Model model) throws ResourceNotFoundException {
 
-        Optional<User> user = userService.findByAddressEmail(authentication.getName());
-        Set<User> friends = user.get().getFriends();
+        User user = userService.findByAddressEmail(authentication.getName()).orElseThrow(ResourceNotFoundException::new);
 
-        model.addAttribute("userName", StringUtils.capitalize(user.get().getFirstName()
+        model.addAttribute("userName", StringUtils.capitalize(user.getFirstName()
                 + " "
-                + StringUtils.capitalize(user.get().getLastName())));
-
-        model.addAttribute("friendList", friends);
+                + StringUtils.capitalize(user.getLastName())));
+        model.addAttribute("account", user.getAccount());
+        model.addAttribute("transactionDebtorList", user.getCreditorTransaction());
+        model.addAttribute("transactionCreditorList", user.getDebtorTransaction());
 
         return "home";
     }

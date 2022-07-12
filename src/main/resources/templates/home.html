@@ -10,101 +10,117 @@
 </head>
 <body class="">
 
-    <!-- BEGIN navbar top -->
-    <nav class="navbar navbar-expand-sm navbar-light">
-        <div class="container-fluid ">
-            <a class="navbar-brand " href="#">Pay My Buddy</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-                <ul class="navbar-nav ">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Transfer</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Log off</a>
-                    </li>
-                </ul>
-            </div>
+<!-- BEGIN navbar top -->
+<nav class="navbar navbar-expand-sm navbar-light">
+    <div class="container-fluid ">
+        <a class="navbar-brand " href="#">Pay My Buddy</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+            <ul class="navbar-nav ">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Transfer</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Log off</a>
+                </li>
+            </ul>
         </div>
-    </nav>
-    <!-- END navbar top -->
-
-    <!-- BEGIN breadcrumb -->
-    <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Transfer</li>
-        </ol>
-    </nav>
-    <!-- END breadcrumb -->
-
-    <!-- BEGIN container -->
-    <div class="container">
-
-        <!-- BEGIN row -->
-        <div class="row">
-            <!-- BEGIN col -->
-            <div class="col">
-                <!-- START send money -->
-                <div class="row">
-                    <div class="col-md-10">
-                        <h5>Send Money</h5>
-                    </div>
-                    <div class="col-md-2">
-                        <button>Add new friend</button>
-                    </div>
-                </div>
-
-                <div id="transfer" style="display: block;background-color: #eeeeee;padding:1em;">
-
-                    <form class="form-group" th:action="@{/transfer}" method="POST">
-                        <input type="hidden" name="userAccount"
-                               id="user-account">
-                        <div class="row mb-2">
-                            <div class="col-md-4">
-                                <select id="toEmail" name="toEmail"  class="custom-select" required>
-                                    <option value="" selected disabled hidden>Select A Connection</option>
-                                    <option th:each="friend : ${friendList}" th:value="${friend.getEmailAddress()}" th:text="${friend.getEmailAddress()}">Email</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <input class="form-control" type="number" min="1" value="0" step=".01" name="amount" id="amount" required>
-                            </div>
-                            <div class="col-md-4">
-                                <input class="form-control" type="text" name="description" id="description">
-                            </div>
-                            <div class="col-md-2">
-                                <button type="submit" name="transfer" class="btn btn-success" value="Transfer">Pay</button>
-                            </div>
-                        </div>
-
-                    </form>
-                </div>
-                <!-- END send money -->
-            </div>
-            <!-- END col-->
-        </div>
-        <!-- END row -->
-
-
     </div>
-    <!-- END container -->
+</nav>
+<!-- END navbar top -->
 
+<!-- BEGIN breadcrumb -->
+<nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Home</li>
+    </ol>
+</nav>
+<!-- END breadcrumb -->
 
+<!-- BEGIN container -->
+<div class="container">
 
+    <!-- BEGIN row -->
+    <div class="row">
+        <!-- BEGIN col -->
+        <div class="col">
 
-    <script th:src="@{/js/popper.min.js}"></script>
+            <!-- START my name and amount -->
+            <div class="row">
+                <div class="col-md-9">
+                    <h5>Bonjour <td th:text="${userName}">UserName</td></h5>
+                </div>
+                <div class="col-md-3">
+                    <h5>Vous avez <td th:text="${account.getBalance()}">Amount</td> euros</h5>
+                </div>
+            </div>
+            <!-- END my name and amount -->
+            <br/><br/>
+
+            <!-- START transaction creditor list -->
+            <div class="table-responsive">
+                <h5>Ma liste des transactions en tant créditeur</h5>
+                <table class="table table-striped table-hover mt-3">
+                    <thead>
+                    <tr class="bg-success text-white">
+                        <th>Connection</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="transaction: ${transactionCreditorList}" >
+                        <td th:text="${transaction.getCreditor().getFirstName()}">Connection</td>
+                        <td th:text="${transaction.getDescription()}">Description</td>
+                        <td th:text="${transaction.getAmount()+'€'}">Amount</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- END transaction creditor list -->
+            <br/><br/>
+            <!-- START transaction debtor list -->
+            <div class="table-responsive">
+                <h5>Ma liste des transactions en tant débiteur</h5>
+                <table class="table table-striped table-hover mt-3">
+                    <thead>
+                    <tr class="bg-success text-white">
+                        <th>Connection</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="transaction: ${transactionDebtorList}" >
+                        <td th:text="${transaction.getDebtor().getFirstName()}">Connection</td>
+                        <td th:text="${transaction.getDescription()}">Description</td>
+                        <td th:text="${transaction.getAmount()+'€'}">Amount</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- END transaction debtor list -->
+
+        </div>
+        <!-- END col-->
+    </div>
+    <!-- END row -->
+
+</div>
+<!-- END container -->
+
+<script th:src="@{/js/popper.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
 </body>
 </html>
