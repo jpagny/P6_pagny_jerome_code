@@ -27,13 +27,10 @@ public class UserService implements IUserService {
     @Override
     public User create(User user) throws ResourceIsAlreadyPresentException {
 
-        Optional<User> savedUser = userRepository.findByEmailAddress(user.getEmailAddress());
+        User savedUser = userRepository.findByEmailAddress(user.getEmailAddress()).orElseThrow(
+                () -> new ResourceIsAlreadyPresentException("User already exist with given email : " + user.getEmailAddress()));
 
-        if (savedUser.isPresent()) {
-            throw new ResourceIsAlreadyPresentException("User already exist with given email : " + user.getEmailAddress());
-        }
-
-        return userRepository.save(user);
+        return userRepository.save(savedUser);
     }
 
     @Override
@@ -53,48 +50,36 @@ public class UserService implements IUserService {
     @Override
     public User update(User user) throws ResourceNotFoundException {
 
-        Optional<User> updatedUser = userRepository.findByEmailAddress(user.getEmailAddress());
+        User updatedUser = userRepository.findByEmailAddress(user.getEmailAddress()).orElseThrow(
+                () -> new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress()));
 
-        if (updatedUser.isEmpty()) {
-            throw new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress());
-        }
 
-        String email = user.getEmailAddress() == null ? updatedUser.get().getEmailAddress() : user.getEmailAddress();
-        String password = user.getPassword() == null ? updatedUser.get().getPassword() : user.getPassword();
+        String email = user.getEmailAddress() == null ? updatedUser.getEmailAddress() : user.getEmailAddress();
+        String password = user.getPassword() == null ? updatedUser.getPassword() : user.getPassword();
 
-        updatedUser.get().setEmailAddress(email);
-        updatedUser.get().setPassword(password);
+        updatedUser.setEmailAddress(email);
+        updatedUser.setPassword(password);
 
-        return userRepository.save(updatedUser.get());
+        return userRepository.save(updatedUser);
     }
 
     @Override
     public void delete(User user) throws ResourceNotFoundException {
+        User deletedUser = userRepository.findByEmailAddress(user.getEmailAddress()).orElseThrow(
+                () -> new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress()));
 
-        Optional<User> deletedUser = userRepository.findByEmailAddress(user.getEmailAddress());
-
-        if (deletedUser.isEmpty()) {
-            throw new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress());
-        }
-
-        userRepository.delete(user);
+        userRepository.delete(deletedUser);
     }
 
     @Override
     public User addFriend(User user, User friend) throws ResourceNotFoundException, ResourceIsAlreadyPresentException {
 
-        Optional<User> theUser = userRepository.findByEmailAddress(user.getEmailAddress());
-        Optional<User> theFriend = userRepository.findByEmailAddress(friend.getEmailAddress());
+        User theUser = userRepository.findByEmailAddress(user.getEmailAddress()).orElseThrow(
+                () -> new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress()));
+        User theFriend = userRepository.findByEmailAddress(friend.getEmailAddress()).orElseThrow(
+                () -> new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress()));
 
-        if (theUser.isEmpty()) {
-            throw new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress());
-        }
-
-        if (theFriend.isEmpty()) {
-            throw new ResourceNotFoundException("User doesn't exist with given email : " + friend.getEmailAddress());
-        }
-
-        if (user.getFriends().contains(friend)) {
+        if (theUser.getFriends().contains(theFriend)) {
             throw new ResourceIsAlreadyPresentException("User " + user.getEmailAddress() + " is already friend with " + friend.getEmailAddress());
         }
 
