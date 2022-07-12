@@ -9,35 +9,7 @@
 </head>
 <body>
 
-<!-- BEGIN navbar top -->
-<nav class="navbar navbar-expand-sm navbar-light">
-    <div class="container-fluid ">
-        <a class="navbar-brand " href="#">Pay My Buddy</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-            <ul class="navbar-nav ">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Transfer</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Log off</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-<!-- END navbar top -->
+<div th:insert="navbar" id="navbar"></div>
 
 <!-- BEGIN breadcrumb -->
 <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
@@ -54,10 +26,18 @@
 
     </div>
     <div class="col-md-9">
-        <h5>First name</h5><td th:text="${user.getFirstName}">FirstName</td><br/><br/>
-        <h5>Last name</h5><td th:text="${user.getLastName}">LastName</td><br/><br/>
-        <h5>Address email</h5><td th:text="${user.getEmailAddress}">AddressEmail</td><br/><br/>
-        <h5>Iban</h5><td th:text="${account.getIban}">Iban</td><br/><br/>
+        <h5>First name</h5>
+        <td th:text="${user.getFirstName}">FirstName</td>
+        <br/><br/>
+        <h5>Last name</h5>
+        <td th:text="${user.getLastName}">LastName</td>
+        <br/><br/>
+        <h5>Address email</h5>
+        <td th:text="${user.getEmailAddress}">AddressEmail</td>
+        <br/><br/>
+        <h5>Iban</h5>
+        <td th:text="${account.getIban}">Iban</td>
+        <br/><br/>
     </div>
 
 </div>
