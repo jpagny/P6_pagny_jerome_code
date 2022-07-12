@@ -14,7 +14,6 @@ public interface IUserService {
 
     User create(User user) throws ResourceIsAlreadyPresentException;
 
-
     User create(UserDTO user) throws ResourceIsAlreadyPresentException;
 
     User update(User user) throws ResourceNotFoundException;
@@ -22,7 +21,5 @@ public interface IUserService {
     void delete(User user) throws ResourceNotFoundException;
 
     User addFriend(User user, User friend) throws ResourceNotFoundException, ResourceIsAlreadyPresentException;
-
-    Transaction addTransaction(Transaction transaction);
 
 }

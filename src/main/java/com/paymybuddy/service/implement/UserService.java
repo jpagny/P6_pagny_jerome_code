@@ -19,8 +19,6 @@ import java.util.Optional;
 @Transactional
 public class UserService implements IUserService {
     private final UserRepository userRepository;
-    private final TransactionService transactionService;
-
     @Override
     public Optional<User> findByAddressEmail(String addressEmail) {
         return userRepository.findByEmailAddress(addressEmail);
@@ -104,20 +102,6 @@ public class UserService implements IUserService {
         userRepository.friends(user);
 
         return friend;
-    }
-
-    @Override
-    public Transaction addTransaction(Transaction transaction) {
-        Optional<User> debtor = userRepository.findByEmailAddress(transaction.getDebtor().getEmailAddress());
-        Optional<User> creditor = userRepository.findByEmailAddress(transaction.getCreditor().getEmailAddress());
-
-        debtor.get().getDebtorTransaction().add(transaction);
-        creditor.get().getCreditorTransaction().add(transaction);
-
-        userRepository.debtorTransaction(debtor.get());
-        userRepository.creditorTransaction((creditor.get()));
-
-        return transaction;
     }
 
 
