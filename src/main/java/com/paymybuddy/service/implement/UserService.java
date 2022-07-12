@@ -1,7 +1,6 @@
 package com.paymybuddy.service.implement;
 
 import com.paymybuddy.dto.UserDTO;
-import com.paymybuddy.entity.Transaction;
 import com.paymybuddy.entity.User;
 import com.paymybuddy.exception.ResourceIsAlreadyPresentException;
 import com.paymybuddy.exception.ResourceNotFoundException;
@@ -19,6 +18,7 @@ import java.util.Optional;
 @Transactional
 public class UserService implements IUserService {
     private final UserRepository userRepository;
+
     @Override
     public Optional<User> findByAddressEmail(String addressEmail) {
         return userRepository.findByEmailAddress(addressEmail);
@@ -27,10 +27,10 @@ public class UserService implements IUserService {
     @Override
     public User create(User user) throws ResourceIsAlreadyPresentException {
 
-        User savedUser = userRepository.findByEmailAddress(user.getEmailAddress()).orElseThrow(
+        userRepository.findByEmailAddress(user.getEmailAddress()).orElseThrow(
                 () -> new ResourceIsAlreadyPresentException("User already exist with given email : " + user.getEmailAddress()));
 
-        return userRepository.save(savedUser);
+        return userRepository.save(user);
     }
 
     @Override
@@ -52,7 +52,6 @@ public class UserService implements IUserService {
 
         User updatedUser = userRepository.findByEmailAddress(user.getEmailAddress()).orElseThrow(
                 () -> new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress()));
-
 
         String email = user.getEmailAddress() == null ? updatedUser.getEmailAddress() : user.getEmailAddress();
         String password = user.getPassword() == null ? updatedUser.getPassword() : user.getPassword();
