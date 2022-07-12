@@ -21,9 +21,9 @@ public class AccountService implements IAccountService {
     @Override
     public Account create(Account account) throws ResourceIsAlreadyPresentException {
 
-        Optional<Account> savecAccount = accountRepository.findById((int) account.getId());
+        Optional<Account> savedAccount = accountRepository.findById(account.getIban());
 
-        if (savecAccount.isPresent()) {
+        if (savedAccount.isPresent()) {
             throw new ResourceIsAlreadyPresentException("Account already exist");
         }
 

@@ -1,7 +1,10 @@
 package com.paymybuddy.controller;
 
 import com.paymybuddy.dto.UserDTO;
+import com.paymybuddy.entity.Account;
 import com.paymybuddy.entity.User;
+import com.paymybuddy.exception.ResourceIsAlreadyPresentException;
+import com.paymybuddy.service.implement.AccountService;
 import com.paymybuddy.service.implement.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,10 +21,12 @@ import java.util.Optional;
 @RequestMapping("/signup")
 public class SignUpController {
     private final UserService userService;
+    private final AccountService accountService;
 
     @Autowired
-    public SignUpController(UserService userService) {
+    public SignUpController(UserService userService, AccountService accountService) {
         this.userService = userService;
+        this.accountService = accountService;
     }
 
     @GetMapping
@@ -30,13 +35,16 @@ public class SignUpController {
     }
 
     @PostMapping
-    private String signupUser(@ModelAttribute UserDTO user, Model model, RedirectAttributes redirectAttributes) {
+    private String signupUser(@ModelAttribute UserDTO user, Model model, RedirectAttributes redirectAttributes) throws ResourceIsAlreadyPresentException {
         String signupError = null;
         Optional<User> existsUser = userService.findByAddressEmail(user.getEmailAddress());
 
         if (existsUser.isPresent()) {
             signupError = "The email already exists";
         } else {
+            Account account = new Account(user.getIban(),0);
+            Account accountSaved = accountService.create(account);
+            user.setAccount(accountSaved);
             userService.create(user);
         }
 

@@ -21,7 +21,7 @@ public class User {
     private String emailAddress;
     private String password;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id", referencedColumnName = "id", unique = true)
+    @JoinColumn(name = "account_id", referencedColumnName = "iban", unique = true)
     private Account account;
     @OneToMany()
     private Set<User> friends;

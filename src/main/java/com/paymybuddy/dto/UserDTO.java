@@ -20,6 +20,7 @@ public class UserDTO {
     private Set<User> friends;
     private Set<Transaction> debtorTransaction;
     private Set<Transaction> creditorTransaction;
+    private String iban;
 
     public UserDTO() {
     }

@@ -13,8 +13,7 @@ import javax.persistence.*;
 @Table(name = "account")
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String iban;
     private double balance;
     public Account() {}
 }
