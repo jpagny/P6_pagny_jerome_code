@@ -30,7 +30,7 @@ public class TransactionService implements ITransactionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Debtor doesn't exist with given email : " + transaction.getDebtor().getEmailAddress()));
 
         User creditor = userRepository.findByEmailAddress(transaction.getCreditor().getEmailAddress())
-                .orElseThrow(() -> new ResourceNotFoundException("Creditor doesn't exist with given email : " + transaction.getDebtor().getEmailAddress()));
+                .orElseThrow(() -> new ResourceNotFoundException("Creditor doesn't exist with given email : " + transaction.getCreditor().getEmailAddress()));
 
         double newSoldDebtor;
         double newSoldCreditor;
