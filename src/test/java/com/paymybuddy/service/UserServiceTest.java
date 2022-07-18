@@ -1,6 +1,8 @@
 package com.paymybuddy.service;
 
+import com.paymybuddy.dto.UserDTO;
 import com.paymybuddy.entity.Account;
+import com.paymybuddy.entity.Transaction;
 import com.paymybuddy.entity.User;
 import com.paymybuddy.exception.ResourceIsAlreadyPresentException;
 import com.paymybuddy.exception.ResourceNotFoundException;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -35,7 +38,7 @@ public class UserServiceTest {
     @DisplayName("Should be returned user when a new user is created")
     public void should_BeReturnedNewUser_When_ANewUserIsCreated() throws ResourceIsAlreadyPresentException {
         User user = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
-        when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(user));
+        when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.empty());
         when(userRepository.save(any(User.class))).thenReturn(user);
 
         User newUser = userService.create(user);
@@ -47,7 +50,7 @@ public class UserServiceTest {
     @DisplayName("Should be exception when user created is already exist in our database")
     public void should_beException_When_UserCreatedIsAlreadyExistInOurDatabase() {
         User user = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
-        when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.empty());
+        when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
         Exception exception = assertThrows(ResourceIsAlreadyPresentException.class, () ->
                 userService.create(user)
@@ -127,6 +130,38 @@ public class UserServiceTest {
 
         assertEquals(friendAdded, friend);
         assertTrue(user.getFriends().contains(friend));
+    }
+
+    @Test
+    @DisplayName("should be returned the user when user is exist")
+    public void should_beReturnedTheUser_when_userIsExist() {
+        User user = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(userRepository.findByEmailAddress("pagny.jerome@gmail.com")).thenReturn(Optional.of(user));
+
+        Optional<User> userFound = userService.findByAddressEmail("pagny.jerome@gmail.com");
+
+        assertTrue(userFound.isPresent());
+        assertEquals(userFound.get(), user);
+    }
+
+    @Test
+    @DisplayName("should be returned user when a new user is created with DTO")
+    public void should_beReturnedTheNewUser_when_userIsCreatedWithDTO() throws ResourceIsAlreadyPresentException {
+        UserDTO userDTO = new UserDTO(1L, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<User>(), new HashSet<Transaction>(), new HashSet<Transaction>(), "xxx-bbb-ccc", 1000.00);
+        User user = new User();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName((userDTO.getLastName()));
+        user.setEmailAddress(userDTO.getEmailAddress());
+        user.setPassword(encoder.encode(userDTO.getPassword()));
+        user.setAccount(userDTO.getAccount());
+
+        when(userRepository.findByEmailAddress("pagny.jerome@gmail.com")).thenReturn(Optional.empty());
+        when(userRepository.save(any(User.class))).thenReturn(user);
+
+        User userSaved = userService.create(userDTO);
+
+        assertEquals(userSaved, user);
     }
 
 

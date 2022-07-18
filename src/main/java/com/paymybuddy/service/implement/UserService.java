@@ -27,14 +27,17 @@ public class UserService implements IUserService {
     @Override
     public User create(User user) throws ResourceIsAlreadyPresentException {
 
-        userRepository.findByEmailAddress(user.getEmailAddress()).orElseThrow(
-                () -> new ResourceIsAlreadyPresentException("User already exist with given email : " + user.getEmailAddress()));
+        Optional<User> userToCreate = userRepository.findByEmailAddress(user.getEmailAddress());
+
+        if (userToCreate.isPresent()){
+            throw new ResourceIsAlreadyPresentException("User already exist with given email : " + user.getEmailAddress());
+        }
 
         return userRepository.save(user);
     }
 
     @Override
-    public User create(UserDTO userDTO) {
+    public User create(UserDTO userDTO) throws ResourceIsAlreadyPresentException {
         User user = new User();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -44,7 +47,7 @@ public class UserService implements IUserService {
         user.setPassword(encoder.encode(userDTO.getPassword()));
         user.setAccount(userDTO.getAccount());
 
-        return userRepository.save(user);
+        return create(user);
     }
 
     @Override
