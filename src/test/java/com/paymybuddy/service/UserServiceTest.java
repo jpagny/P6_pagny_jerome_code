@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -73,6 +74,32 @@ public class UserServiceTest {
         User userUpdated = userService.update(userToUpdate);
 
         assertEquals(userUpdated, userToUpdate);
+    }
+
+    @Test
+    @DisplayName("Should be returned user when password is updated")
+    public void should_beReturnedUser_when_passwordIsUpdated() throws ResourceNotFoundException {
+        User userToUpdate = new User(1, "jerome", "pagny", "pagny.jerome1@gmail.com", null, new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        userToUpdate.setPassword("pagny.jerome1@gmail.com");
+        when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(userToUpdate));
+        when(userRepository.save(any(User.class))).thenReturn(userToUpdate);
+
+        User userUpdated = userService.update(userToUpdate);
+
+        assertEquals(userUpdated, userToUpdate);
+    }
+
+    @Test
+    @DisplayName("Should be returned user when passwordToUpdate is null")
+    public void should_beReturnedUser_when_passwordToUpdateIsNull() throws ResourceNotFoundException {
+        User userOld = new User(1, "jerome", "pagny", "pagny.jerome1@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User userToUpdate = new User(1, "jerome", "pagny", "pagny.jerome1@gmail.com", null, new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(userOld));
+        when(userRepository.save(any(User.class))).thenReturn(userOld);
+
+        User userUpdated = userService.update(userToUpdate);
+
+        assertEquals(userUpdated.getPassword(),"xxx");
     }
 
     @Test
@@ -131,6 +158,64 @@ public class UserServiceTest {
         assertEquals(friendAdded, friend);
         assertTrue(user.getFriends().contains(friend));
     }
+
+    @Test
+    @DisplayName("Should be exception when the user to add a new friend doesn't exist")
+    public void should_beException_when_theUserToAddANewFriendDoesntExist() throws ResourceNotFoundException, ResourceIsAlreadyPresentException {
+        User user = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User friend = new User(4, "nicolas", "pagny", "pagny.nicolas@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(userRepository.findByEmailAddress(user.getEmailAddress())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () ->
+                userService.addFriend(user,friend)
+        );
+
+        String expectedMessage = "User doesn't exist with given email : " + user.getEmailAddress();
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    @DisplayName("Should be exception when the new friend doesn't exist")
+    public void should_beException_when_theNewFriendDoesntExist() throws ResourceNotFoundException, ResourceIsAlreadyPresentException {
+        User user = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User friend = new User(4, "nicolas", "pagny", "pagny.nicolas@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(userRepository.findByEmailAddress(user.getEmailAddress())).thenReturn(Optional.of(user));
+        when(userRepository.findByEmailAddress(friend.getEmailAddress())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () ->
+                userService.addFriend(user,friend)
+        );
+
+        String expectedMessage = "User doesn't exist with given email : " + friend.getEmailAddress();
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    @DisplayName("Should be exception when the friend to add is already added")
+    public void should_beException_when_theFriendToAddIsAlreadyAdded() throws ResourceNotFoundException, ResourceIsAlreadyPresentException {
+        User user = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        User friend = new User(4, "nicolas", "pagny", "pagny.nicolas@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        HashSet listFriend = new HashSet();
+        listFriend.add(friend);
+        user.setFriends(listFriend);
+
+        when(userRepository.findByEmailAddress(user.getEmailAddress())).thenReturn(Optional.of(user));
+        when(userRepository.findByEmailAddress(friend.getEmailAddress())).thenReturn(Optional.of(friend));
+
+        Exception exception = assertThrows(ResourceIsAlreadyPresentException.class, () ->
+                userService.addFriend(user,friend)
+        );
+
+        String expectedMessage = "User " + user.getEmailAddress() + " is already friend with " + friend.getEmailAddress();
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
 
     @Test
     @DisplayName("should be returned the user when user is exist")

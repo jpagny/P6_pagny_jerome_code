@@ -56,10 +56,8 @@ public class UserService implements IUserService {
         User updatedUser = userRepository.findByEmailAddress(user.getEmailAddress()).orElseThrow(
                 () -> new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress()));
 
-        String email = user.getEmailAddress() == null ? updatedUser.getEmailAddress() : user.getEmailAddress();
         String password = user.getPassword() == null ? updatedUser.getPassword() : user.getPassword();
 
-        updatedUser.setEmailAddress(email);
         updatedUser.setPassword(password);
 
         return userRepository.save(updatedUser);
@@ -79,7 +77,7 @@ public class UserService implements IUserService {
         User theUser = userRepository.findByEmailAddress(user.getEmailAddress()).orElseThrow(
                 () -> new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress()));
         User theFriend = userRepository.findByEmailAddress(friend.getEmailAddress()).orElseThrow(
-                () -> new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress()));
+                () -> new ResourceNotFoundException("User doesn't exist with given email : " + friend.getEmailAddress()));
 
         if (theUser.getFriends().contains(theFriend)) {
             throw new ResourceIsAlreadyPresentException("User " + user.getEmailAddress() + " is already friend with " + friend.getEmailAddress());
