@@ -18,8 +18,6 @@ public interface IUserService {
 
     User update(User user) throws ResourceNotFoundException;
 
-    void delete(User user) throws ResourceNotFoundException;
-
     User addFriend(User user, User friend) throws ResourceNotFoundException, ResourceIsAlreadyPresentException;
 
 }

@@ -117,35 +117,6 @@ public class UserServiceTest {
 
         assertTrue(actualMessage.contains(expectedMessage));
     }
-
-    @Test
-    @DisplayName("Should be returned nothing when user is deleted")
-    public void should_beReturnedNothing_when_userIsDeleted() {
-        User user = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
-        when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(user));
-        doNothing().when(userRepository).delete(user);
-
-        userRepository.delete(user);
-
-        verify(userRepository, times(1)).delete(user);
-    }
-
-    @Test
-    @DisplayName("Should be exception when user deleted doesn't exist in our database")
-    public void should_beException_When_UserDeletedDoesntExistInOurDatabase() {
-        User user = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
-        when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.empty());
-
-        Exception exception = assertThrows(ResourceNotFoundException.class, () ->
-                userService.delete(user)
-        );
-
-        String expectedMessage = "User doesn't exist with given email : " + user.getEmailAddress();
-        String actualMessage = exception.getMessage();
-
-        assertTrue(actualMessage.contains(expectedMessage));
-    }
-
     @Test
     @DisplayName("Should be returned the friend added when a new friend is added")
     public void should_beReturnedTheFriendAdded_when_aNewFriendIsAdded() throws ResourceNotFoundException, ResourceIsAlreadyPresentException {

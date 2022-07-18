@@ -62,15 +62,6 @@ public class UserService implements IUserService {
 
         return userRepository.save(updatedUser);
     }
-
-    @Override
-    public void delete(User user) throws ResourceNotFoundException {
-        User deletedUser = userRepository.findByEmailAddress(user.getEmailAddress()).orElseThrow(
-                () -> new ResourceNotFoundException("User doesn't exist with given email : " + user.getEmailAddress()));
-
-        userRepository.delete(deletedUser);
-    }
-
     @Override
     public User addFriend(User user, User friend) throws ResourceNotFoundException, ResourceIsAlreadyPresentException {
 
