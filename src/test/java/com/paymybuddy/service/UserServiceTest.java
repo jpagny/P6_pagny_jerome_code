@@ -1,7 +1,6 @@
 package com.paymybuddy.service;
 
 import com.paymybuddy.entity.Account;
-import com.paymybuddy.entity.Transaction;
 import com.paymybuddy.entity.User;
 import com.paymybuddy.exception.ResourceIsAlreadyPresentException;
 import com.paymybuddy.exception.ResourceNotFoundException;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
 
@@ -37,7 +35,7 @@ public class UserServiceTest {
     @DisplayName("Should be returned user when a new user is created")
     public void should_BeReturnedNewUser_When_ANewUserIsCreated() throws ResourceIsAlreadyPresentException {
         User user = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
-        when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.empty());
+        when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
 
         User newUser = userService.create(user);
@@ -49,7 +47,7 @@ public class UserServiceTest {
     @DisplayName("Should be exception when user created is already exist in our database")
     public void should_beException_When_UserCreatedIsAlreadyExistInOurDatabase() {
         User user = new User(1, "jerome", "pagny", "pagny.jerome@gmail.com", "xxx", new Account(), new HashSet<>(), new HashSet<>(), new HashSet<>());
-        when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.of(user));
+        when(userRepository.findByEmailAddress(any(String.class))).thenReturn(Optional.empty());
         when(userRepository.save(any(User.class))).thenReturn(user);
         Exception exception = assertThrows(ResourceIsAlreadyPresentException.class, () ->
                 userService.create(user)
