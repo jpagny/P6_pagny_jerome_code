@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,7 +40,7 @@ public class ContactControllerTestIT {
     @WithUserDetails("pagny.jerome@gmail.com")
     @DisplayName("Should be able to visit contact page when user is authenticated")
     public void should_beAbleToVisitContactPage_when_userIsAuthenticated() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/contact"))
+        mockMvc.perform(get("/contact"))
                 .andExpect(status().isOk());
     }
 

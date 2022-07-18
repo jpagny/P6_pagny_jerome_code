@@ -12,9 +12,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -24,6 +24,13 @@ public class SignUpControllerTestIT {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Test
+    @DisplayName("Should be able visit signup page when get /signup url")
+    public void should_beAbleVisitSignUpPageWhenGetSignUpUrl() throws Exception {
+        mockMvc.perform(get("/signup"))
+                .andExpect(status().isOk());
+    }
 
     @Test
     @WithMockUser
@@ -44,6 +51,27 @@ public class SignUpControllerTestIT {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/login"));
+    }
+
+    @Test
+    @WithMockUser
+    @DisplayName("Should be returned message signupError when user to register is already exist")
+    public void should_beReturnedMessageSignupError_when_userToRegisterIsAlreadyExist() throws Exception {
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(1000L);
+        userDTO.setFirstName("jerome");
+        userDTO.setLastName("pagny");
+        userDTO.setEmailAddress("pagny.jerome@gmail.com");
+        userDTO.setPassword("xxx");
+        userDTO.setIban("zzz-xxx-vvv");
+        userDTO.setInitialBalance(3000.0);
+
+        mockMvc.perform(post("/signup")
+                        .flashAttr("user", userDTO))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(model().attributeExists("signupError"))
+                .andExpect(model().attribute("signupError", "The email already exists"));
     }
 
 

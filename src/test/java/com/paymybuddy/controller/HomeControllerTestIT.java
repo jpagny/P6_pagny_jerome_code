@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,14 +39,14 @@ public class HomeControllerTestIT {
     @WithUserDetails("pagny.jerome@gmail.com")
     @DisplayName("Should be able to visit home page when user is authenticated")
     public void should_beAbleToVisitHomePage_when_userIsAuthenticated() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/home"))
+        mockMvc.perform(get("/home"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("Should be not able to visit home page when user is not authenticated")
     public void should_beNotAbleToVisitHomePage_when_userIsNotAuthenticated() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/home"))
+        mockMvc.perform(get("/home"))
                 .andExpect(redirectedUrl("http://localhost/login"));
     }
 

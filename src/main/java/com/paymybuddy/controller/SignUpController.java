@@ -52,7 +52,7 @@ public class SignUpController {
             redirectAttributes.addFlashAttribute("message", "You've successfully signed up, please login.");
             return "redirect:/login";
         } else {
-            model.addAttribute("signupError", true);
+            model.addAttribute("signupError", signupError);
         }
 
         return "signup";
