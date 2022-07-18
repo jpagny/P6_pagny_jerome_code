@@ -35,7 +35,7 @@ public class SignUpController {
     }
 
     @PostMapping
-    private String signupUser(@ModelAttribute UserDTO user, Model model, RedirectAttributes redirectAttributes) throws ResourceIsAlreadyPresentException {
+    private String signupUser(@ModelAttribute("user") UserDTO user, Model model, RedirectAttributes redirectAttributes) throws ResourceIsAlreadyPresentException {
         String signupError = null;
         Optional<User> existsUser = userService.findByAddressEmail(user.getEmailAddress());
 
