@@ -24,6 +24,7 @@ public class MyErrorController implements ErrorController {
                 return "error-404";
             }
         }
-        return "error-404";
+
+        return "unknown";
     }
 }

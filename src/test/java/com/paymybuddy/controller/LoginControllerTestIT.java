@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -24,9 +25,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
 @Sql("/data.sql")
+@AutoConfigureMockMvc(addFilters = false)
 @Transactional
 public class LoginControllerTestIT {
-
     private MockMvc mockMvc;
 
     @Autowired
@@ -53,7 +54,8 @@ public class LoginControllerTestIT {
         mockMvc.perform(formLogin("/login").user("pagny.jerome@gmail.com").password("Test"))
                 .andExpect(redirectedUrl("/home"));
     }
-    */
+
+     */
 
 
 }

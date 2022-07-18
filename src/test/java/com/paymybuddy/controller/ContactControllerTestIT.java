@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Sql("/data.sql")
 @Transactional
-public class HomeControllerTestIT {
+public class ContactControllerTestIT {
 
     private MockMvc mockMvc;
 
@@ -34,18 +34,19 @@ public class HomeControllerTestIT {
                 .apply(springSecurity())
                 .build();
     }
+
     @Test
     @WithUserDetails("pagny.jerome@gmail.com")
-    @DisplayName("Should be able to visit home page when user is authenticated")
-    public void should_beAbleToVisitHomePage_when_userIsAuthenticated() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/home"))
+    @DisplayName("Should be able to visit contact page when user is authenticated")
+    public void should_beAbleToVisitContactPage_when_userIsAuthenticated() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/contact"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @DisplayName("Should be not able to visit home page when user is not authenticated")
-    public void should_beNotAbleToVisitHomePage_when_userIsNotAuthenticated() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/home"))
+    @DisplayName("Should be not able to visit contact page when user is not authenticated")
+    public void should_beNotAbleToVisitContactPage_when_userIsNotAuthenticated() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/contact"))
                 .andExpect(redirectedUrl("http://localhost/login"));
     }
 
