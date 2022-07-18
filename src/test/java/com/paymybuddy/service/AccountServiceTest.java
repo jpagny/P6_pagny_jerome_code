@@ -46,7 +46,6 @@ public class AccountServiceTest {
     public void should_beException_When_AccountCreatedIsAlreadyExistInOurDatabase() {
         Account account = new Account("xxx", 100);
         when(accountRepository.findById(any(String.class))).thenReturn(Optional.of(account));
-        when(accountRepository.save(any(Account.class))).thenReturn(account);
         Exception exception = assertThrows(ResourceIsAlreadyPresentException.class, () ->
                 accountService.create(account)
         );

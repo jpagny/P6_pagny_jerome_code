@@ -24,7 +24,7 @@ public class AccountService implements IAccountService {
         Optional<Account> accountToCreate = accountRepository.findById(account.getIban());
 
         if ( accountToCreate.isPresent() ) {
-            new ResourceIsAlreadyPresentException("Account already exist");
+            throw new ResourceIsAlreadyPresentException("Account already exist");
         }
 
         return accountRepository.save(account);
