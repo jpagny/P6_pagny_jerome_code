@@ -8,37 +8,37 @@ Une application qui permettrait aux clients de transférer de l'argent pour gér
 
 ### 1.  Le diagramme de classe UML
 
-![](C:/Users/pagny/OneDrive/Bureau/2022-07-19_08-36.png)
+![](doc/images/uml.png)
 
 ### 2. Le modèle physique de données
 
-![](C:/Users/pagny/OneDrive/Bureau/pysique.png)
+![](doc/images/pysique.png)
 
 ### 3. Les interfaces web
 
 *login page*
 
-![](C:/Users/pagny/OneDrive/Bureau/interface/login.png)
+![](doc/images/login.png)
 
 *registration page*
 
-![](C:/Users/pagny/OneDrive/Bureau/interface/signup.png)
+![](doc/images/signup.png)
 
 *home page*
 
-![](C:/Users/pagny/OneDrive/Bureau/interface/home.png)
+![](doc/images/home.png)
 
 *transfer page*
 
-![](C:/Users/pagny/OneDrive/Bureau/interface/transfer.png)
+![](doc/images/transfer.png)
 
 *contact us page*
 
-![](C:/Users/pagny/OneDrive/Bureau/interface/contactus.png)
+![](doc/images/contactus.png)
 
 ### 4. Les résultats des tests unitaires & tests intégrations
 
-![](C:/Users/pagny/OneDrive/Bureau/interface/2022-07-19_08-59.png)
+![](doc/images/result jacoco merged.png)
 
 ### 5. Note
 
