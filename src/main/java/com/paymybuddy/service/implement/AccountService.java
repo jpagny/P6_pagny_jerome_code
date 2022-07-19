@@ -14,17 +14,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 public class AccountService implements IAccountService {
-
     private final AccountRepository accountRepository;
-
 
     @Override
     public Account create(Account account) throws ResourceIsAlreadyPresentException {
 
         Optional<Account> accountToCreate = accountRepository.findById(account.getIban());
 
-        if ( accountToCreate.isPresent() ) {
-            throw new ResourceIsAlreadyPresentException("Account already exist");
+        if (accountToCreate.isPresent()) {
+            throw new ResourceIsAlreadyPresentException("Account with iban " + account.getIban() + " is already exist.");
         }
 
         return accountRepository.save(account);

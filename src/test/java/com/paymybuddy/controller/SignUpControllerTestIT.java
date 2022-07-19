@@ -18,7 +18,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-@Sql("/data.sql")
 @Transactional
 public class SignUpControllerTestIT {
 
@@ -71,7 +70,7 @@ public class SignUpControllerTestIT {
                         .flashAttr("user", userDTO))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(model().attributeExists("signupError"))
-                .andExpect(model().attribute("signupError", "The email already exists"));
+                .andExpect(model().attribute("signupError", "User already exist with given email : pagny.jerome@gmail.com"));
     }
 
 

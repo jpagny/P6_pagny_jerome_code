@@ -7,7 +7,6 @@ import com.paymybuddy.exception.ResourceNotFoundException;
 import com.paymybuddy.service.implement.TransactionService;
 import com.paymybuddy.service.implement.UserService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,11 +22,14 @@ import java.util.Set;
 @Controller
 public class TransferController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private TransactionService transactionService;
+    private final TransactionService transactionService;
+
+    public TransferController(UserService userService, TransactionService transactionService) {
+        this.userService = userService;
+        this.transactionService = transactionService;
+    }
 
     @GetMapping("/transfer")
     public String getTransferPage(Authentication authentication, Model model) throws ResourceNotFoundException {
@@ -61,9 +63,6 @@ public class TransferController {
             transactionDTO.setCreditor(creditor);
             Transaction transaction = new ModelMapper().map(transactionDTO, Transaction.class);
             transactionService.create(transaction);
-
-        } catch (ResourceNotFoundException ex) {
-            transactionError = ex.getMessage();
 
         } catch (Exception ex) {
             transactionError = ex.getMessage();

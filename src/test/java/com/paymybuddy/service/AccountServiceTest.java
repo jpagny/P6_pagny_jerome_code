@@ -50,7 +50,7 @@ public class AccountServiceTest {
                 accountService.create(account)
         );
 
-        String expectedMessage = "Account already exist";
+        String expectedMessage = "Account with iban " + account.getIban() + " is already exist";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));

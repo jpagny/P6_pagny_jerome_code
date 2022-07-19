@@ -22,7 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
-@Sql("/data.sql")
 @AutoConfigureMockMvc(addFilters = false)
 @Transactional
 public class LoginControllerTestIT {
