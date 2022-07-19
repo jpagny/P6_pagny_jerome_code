@@ -19,8 +19,6 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
@@ -29,10 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class LoginControllerTestIT {
     private MockMvc mockMvc;
-
     @Autowired
     private WebApplicationContext webApplicationContext;
-
 
     @BeforeEach
     public void init() {
@@ -41,21 +37,10 @@ public class LoginControllerTestIT {
                 .apply(springSecurity())
                 .build();
     }
-
     @Test
     @DisplayName("Should be returned 200 when get page login")
     public void should_beReturned200_when_getPageLogin() throws Exception {
         this.mockMvc.perform(get("/login")).andDo(print()).andExpect(status().isOk());
     }
-
-    /*
-    @Test
-    public void should_beRedirectedAtHomePage_when_userIsAuthenticated() throws Exception {
-        mockMvc.perform(formLogin("/login").user("pagny.jerome@gmail.com").password("Test"))
-                .andExpect(redirectedUrl("/home"));
-    }
-
-     */
-
 
 }
