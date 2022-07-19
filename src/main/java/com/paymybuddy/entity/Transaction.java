@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @AllArgsConstructor
@@ -24,12 +25,18 @@ public class Transaction {
     @ManyToOne
     private User creditor;
 
+    @NotNull
     private String description;
+
+    @NotNull
     private double amount;
+
+    @NotNull
     private double percentOfFreshTransaction;
 
-    @Column(name="date", columnDefinition="TIMESTAMP")
+    @Column(name = "date", columnDefinition = "TIMESTAMP")
     private LocalDate date;
 
-    public Transaction() {}
+    public Transaction() {
+    }
 }

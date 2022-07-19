@@ -29,7 +29,7 @@ public class UserService implements IUserService {
 
         Optional<User> userToCreate = userRepository.findByEmailAddress(user.getEmailAddress());
 
-        if (userToCreate.isPresent()){
+        if (userToCreate.isPresent()) {
             throw new ResourceIsAlreadyPresentException("User already exist with given email : " + user.getEmailAddress());
         }
 
@@ -62,6 +62,7 @@ public class UserService implements IUserService {
 
         return userRepository.save(updatedUser);
     }
+
     @Override
     public User addFriend(User user, User friend) throws ResourceNotFoundException, ResourceIsAlreadyPresentException {
 

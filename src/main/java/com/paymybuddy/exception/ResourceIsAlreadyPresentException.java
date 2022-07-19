@@ -1,10 +1,11 @@
 package com.paymybuddy.exception;
 
-public class ResourceIsAlreadyPresentException extends Exception{
+public class ResourceIsAlreadyPresentException extends Exception {
 
-    public ResourceIsAlreadyPresentException(){}
+    public ResourceIsAlreadyPresentException() {
+    }
 
-    public ResourceIsAlreadyPresentException(String message){
+    public ResourceIsAlreadyPresentException(String message) {
         super(message);
     }
 

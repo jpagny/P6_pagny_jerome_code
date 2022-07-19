@@ -2,7 +2,6 @@ package com.paymybuddy.controller;
 
 import com.paymybuddy.dto.UserDTO;
 import com.paymybuddy.entity.Account;
-import com.paymybuddy.entity.User;
 import com.paymybuddy.exception.ResourceIsAlreadyPresentException;
 import com.paymybuddy.service.implement.AccountService;
 import com.paymybuddy.service.implement.UserService;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/signup")
@@ -35,17 +32,16 @@ public class SignUpController {
     }
 
     @PostMapping
-    private String signupUser(@ModelAttribute("user") UserDTO user, Model model, RedirectAttributes redirectAttributes) throws ResourceIsAlreadyPresentException {
+    private String signupUser(@ModelAttribute("user") UserDTO user, Model model, RedirectAttributes redirectAttributes) {
         String signupError = null;
-        Optional<User> existsUser = userService.findByAddressEmail(user.getEmailAddress());
 
-        if (existsUser.isPresent()) {
-            signupError = "The email already exists";
-        } else {
+        try {
             Account account = new Account(user.getIban(), user.getInitialBalance());
             Account accountSaved = accountService.create(account);
             user.setAccount(accountSaved);
             userService.create(user);
+        } catch (ResourceIsAlreadyPresentException e) {
+            signupError = e.getMessage();
         }
 
         if (signupError == null) {

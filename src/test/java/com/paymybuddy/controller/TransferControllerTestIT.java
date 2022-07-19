@@ -25,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 
 @SpringBootTest
-@Sql("/data.sql")
 @Transactional
 public class TransferControllerTestIT {
 
