@@ -38,7 +38,7 @@ Une application qui permettrait aux clients de transférer de l'argent pour gér
 
 ### 4. Les résultats des tests unitaires & tests intégrations
 
-![](doc/images/result jacoco merged.png)
+![](doc/images/result_jacoco_merged.png)
 
 ### 5. Note
 
