@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:insert="head" id="head"></div>
+    <title>Profile</title>
+</head>
+<body>
+
+<div th:insert="navbar" id="navbar"></div>
+
+<!-- BEGIN breadcrumb -->
+<nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/home">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Profile</li>
+    </ol>
+</nav>
+<!-- END breadcrumb -->
+
+
+<div class="container">
+    <div class="row">
+
+    </div>
+    <div class="col-md-9">
+        <h5>First name</h5>
+        <td th:text="${user.getFirstName}">FirstName</td>
+        <br/><br/>
+        <h5>Last name</h5>
+        <td th:text="${user.getLastName}">LastName</td>
+        <br/><br/>
+        <h5>Address email</h5>
+        <td th:text="${user.getEmailAddress}">AddressEmail</td>
+        <br/><br/>
+        <h5>Iban</h5>
+        <td th:text="${account.getIban}">Iban</td>
+        <br/><br/>
+    </div>
+
+</div>
+</body>
+</html>
